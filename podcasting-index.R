@@ -1,12 +1,17 @@
 #!/usr/bin/env Rscript
-# This script was developed on ubunto and depends on having previously installed these packages: 
+# Dependancies:
+# This script was developed on linux/ubuntu and depends on having previously installed these packages: 
 # sudo apt install libssl-dev openssl curl libcurl4-openssl-dev 
-# [Todo] add check for pacman install, if missing then install it install.packages("pacman")
+
+# If missing then install pacman
+if (!require("pacman")) install.packages("pacman")
+# install and load everything else with pacman
 pacman::p_load(
 	httr,
 	jsonlite,
         digest,
-	askpass
+	askpass,
+	argparser
 )
 
 # Intial working R Example (a single function as a begining for a package)
@@ -57,46 +62,32 @@ podcast_index_api_search_byterm <- function(...){
 	)	
 	# For fun: Sets User-Agent to something like (that date is the R version date):
 	# R version 4.0.5 (2021-03-31) (x86_64 Linux 5.8.0-48-generic; script; podcasting-index-r-cli)
-
 	   
        # we'll need the unix time, for a linux system just using: 
 	epoch_time <- as.numeric(as.POSIXlt(Sys.time(), "GMT"))
-	#NOT --> as.integer(Sys.time())
 
 	# our hash here is the api key + secret + time 
 	data_to_hash <- paste0(
 		api_key, api_secret, as.character(epoch_time)
 	)
-	# which is then sha-1'd
-	sha_1 <- digest::sha1(data_to_hash)
+	# which then generates the authorization hash via sha-1 (had to set serialize=FALSE, to work)
+	sha_1 <- digest(data_to_hash,algo="sha1",serialize=FALSE)
 
-# try this??? 	sha_1 <- sha1_hash("",paste0(api_key,api_secret, as.character(epoch_time)))
+	# GET our payload
 	response <- GET(
-		url = "https://api.podcastindex.org/api/1.0/search/byterm?q=no+agenda+33",
-		config = add_headers(
+		url = "https://api.podcastindex.org", 
+		path = "/api/1.0/search/byterm",
+		query = search_queries,
+		add_headers(
 			`User-Agent` = user_agent,
 	                `X-Auth-Date` = epoch_time,
 			`X-Auth-Key` = api_key,
-			`Authorization` = sha_1
-		),
-		 encode = "json"
+			Authorization = sha_1,
+			Accept = "application/json"
+		)
 	)
 
-#Accept = "application/json"
-#	response_BROKE <- GET(
-#		url = "https://api.podcastindex.org", 
-#		path = "/api/1.0/search/byterm",
-#		query = search_queries,
-#		add_headers(
-#			`User-Agent` = user_agent,
-#	                `X-Auth-Date` = epoch_time,
-#			`X-Auth-Key` = api_key,
-#			Authorization = sha_1,
-#			Accept = "application/json"
-#		)
-#	)
-
-# NOT RUN:  
+# NOT RUN, needs further testing:  
 #	if (http_error(response)) {
 #		stop(
 #		      sprintf(
@@ -117,6 +108,6 @@ podcast_index_api_search_byterm <- function(...){
    }
 }
 
-check <-podcast_index_api_search_byterm("no","agenda",33) 
+check <-podcast_index_api_search_byterm("no","agenda","wayback") 
 
 message(check)
