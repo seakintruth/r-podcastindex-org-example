@@ -1,2 +1,2 @@
-Sys.setenv(podcast.index.api.key = "ENTER YOUR KEY HERE")
-Sys.setenv(podcast.index.api.secret = "ENTER YOUR SECRET HERE")
+api_key <- "ENTER YOUR KEY HERE"
+api_secret <- "ENTER YOUR SECRET HERE"
