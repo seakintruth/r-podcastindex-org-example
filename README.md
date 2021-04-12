@@ -11,10 +11,9 @@ R language example of how to engage with the https://podcastindex.org/ APIs
   sudo apt install libssl-dev openssl curl libcurl4-openssl-dev
   ```
 
-1. Script prompts you for the `api_key` and `api_secret` with your api and key values provided by https://api.podcastindex.org.  This script stores your keys in user environment variables for convinience, do change to a file method for a production shiny app.
-
+1. Script prompts you for the `api_key` and `api_secret` with your api and key values provided by https://api.podcastindex.org.  This script stores your keys in user environment variables for convinience, do change to a file method for a production [shiny app.](https://shiny.rstudio.com/gallery/)
 
 1. Execute in command line:
     ```bash
-    $ r podcasting-index.R "adam curry"
+    $ R podcasting-index.R "adam curry"
     ```
