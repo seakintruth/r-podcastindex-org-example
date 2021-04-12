@@ -55,7 +55,11 @@ podcast_index_api_search_byterm <- function(...){
 		),
 		"; script; podcasting-index-r-cli)"
 	)	
-	# we'll need the unix time, for a linux system just using: 
+	# For fun: Sets User-Agent to something like (that date is the R version date):
+	# R version 4.0.5 (2021-03-31) (x86_64 Linux 5.8.0-48-generic; script; podcasting-index-r-cli)
+
+	   
+       # we'll need the unix time, for a linux system just using: 
 	epoch_time <- as.numeric(as.POSIXlt(Sys.time(), "GMT"))
 	#NOT --> as.integer(Sys.time())
 
@@ -66,9 +70,7 @@ podcast_index_api_search_byterm <- function(...){
 	# which is then sha-1'd
 	sha_1 <- digest::sha1(data_to_hash)
 
-#	sha_1 <- sha1_hash(api_key,paste0(api_secret, as.character(epoch_time)))
-	# For fun: Sets User-Agent to something like (that date is the R version date):
-	# R version 4.0.5 (2021-03-31) (x86_64 Linux 5.8.0-48-generic; script; podcasting-index-r-cli)
+# try this??? 	sha_1 <- sha1_hash("",paste0(api_key,api_secret, as.character(epoch_time)))
 	response <- GET(
 		url = "https://api.podcastindex.org/api/1.0/search/byterm?q=no+agenda+33",
 		config = add_headers(
@@ -95,7 +97,6 @@ podcast_index_api_search_byterm <- function(...){
 #	)
 
 # NOT RUN:  
-#		argument = arguments,
 #	if (http_error(response)) {
 #		stop(
 #		      sprintf(
