@@ -8,8 +8,8 @@ R language example of how to engage with the https://podcastindex.org/ APIs
 1. Add your Key and Secret to the 'key.R' file
 
 1. Install dependencies 
-  1. For Linux your distro's equivilent of (ubuntu 20.04 example)
-  ```R
+  - On Linux use your distro's equivilent of this ubuntu 20.04 example
+  ```bash
   sudo apt install libssl-dev openssl curl libcurl4-openssl-dev
   ```
   
